@@ -1,9 +1,11 @@
 package ua.edu.ucu;
 
+import java.lang.reflect.Array;
 import java.util.Arrays;
 import ua.edu.ucu.functions.MyComparator;
 import ua.edu.ucu.functions.MyFunction;
 import ua.edu.ucu.functions.MyPredicate;
+import ua.edu.ucu.smartarr.*;
 
 public class SmartArrayApp {
 
@@ -34,26 +36,62 @@ public class SmartArrayApp {
         // Input: [-1, 2, 0, 1, -5, 3]
         SmartArray sa = new BaseArray(integers);
 
-        sa = new FilterDecorator(sa, pr); // Result: [2, 1, 3];
-        sa = new SortDecorator(sa, cmp); // Result: [1, 2, 3]
-        sa = new MapDecorator(sa, func); // Result: [2, 4, 6]
+//        sa = new FilterDecorator(sa, pr); // Result: [2, 1, 3];
+//        sa = new SortDecorator(sa, cmp); // Result: [1, 2, 3]
+//        sa = new MapDecorator(sa, func); // Result: [2, 4, 6]
 
         // Alternative
-//        sa = new MapDecorator(
-//                    new SortDecorator(
-//                        new FilterDecorator(sa, pr),
-//                    cmp),
-//                func);
+        sa = new MapDecorator(
+                    new SortDecorator(
+                        new FilterDecorator(sa, pr),
+                    cmp),
+                func);
         Object[] result = sa.toArray();
         return Arrays.copyOf(result, result.length, Integer[].class);
     }
 
     public static String[]
             findDistinctStudentNamesFrom2ndYearWithGPAgt4AndOrderedBySurname(Student[] students) {
+        MyPredicate pr_1 = new MyPredicate() {
+            @Override
+            public boolean test(Object t) {
+                return ((Student) t).getGPA() >= 4 && ((Student) t).getYear() == 2;
+            }
+        };
+
+        MyComparator cmp_1 = new MyComparator() {
+            @Override
+            public int compare(Object o1, Object o2) {
+                return ((Student) o1).getSurname()
+                        .compareTo(((Student) o2).getSurname());
+            }
+        };
+
+        MyFunction func_1 = new MyFunction() {
+            @Override
+            public Object apply(Object t) {
+                return ((Student) t).getSurname() +
+                        " " + ((Student) t).getName();
+            }
+        };
+        MyFunction func_2 = new MyFunction() {
+            @Override
+            public String apply(Object t) {
+                return (String)t;
+            }
+        };
+        SmartArray sa = new BaseArray(students);
+        sa = new MapDecorator(new SortDecorator(new FilterDecorator(new DistinctDecorator(sa), pr_1), cmp_1), func_1);
 
         // Hint: to convert Object[] to String[] - use the following code
         //Object[] result = studentSmartArray.toArray();
         //return Arrays.copyOf(result, result.length, String[].class);
-        return null;
+        String[] temp = new String[sa.size()];
+        Object[] temp1 = sa.toArray();
+        for (int i = 0; i < sa.size(); ++i){
+            temp[i] = (String)temp1[i];
+        }
+        System.out.println(Arrays.toString(temp));
+        return temp;
     }
 }
