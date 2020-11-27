@@ -5,9 +5,9 @@ import ua.edu.ucu.functions.MyFunction;
 import java.util.Arrays;
 
 // Map every element to another object using MyFunction
-public class MapDecorator extends SmartArrayDecorator{
+public class MapDecorator extends SmartArrayDecorator {
 
-    public MapDecorator(SmartArray smartArray, MyFunction f){
+    public MapDecorator(SmartArray smartArray, MyFunction f) {
         super(smartArray);
         this.smartArray = new BaseArray(Arrays.
                 stream(smartArray.toArray()).
@@ -16,6 +16,6 @@ public class MapDecorator extends SmartArrayDecorator{
 
     @Override
     public String operationDescription() {
-        return "Map Decorator";
+        return "Used Map Decorator";
     }
 }

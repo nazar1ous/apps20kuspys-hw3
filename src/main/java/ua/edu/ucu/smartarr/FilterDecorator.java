@@ -6,7 +6,7 @@ import java.util.Arrays;
 
 // Tests every element and removes it if it doesn't satisfy MyPredicate
 public class FilterDecorator extends SmartArrayDecorator {
-    public FilterDecorator(SmartArray smartArray, MyPredicate predicate){
+    public FilterDecorator(SmartArray smartArray, MyPredicate predicate) {
         super(smartArray);
         this.smartArray = new BaseArray(Arrays.
                 stream(smartArray.toArray()).
@@ -15,6 +15,6 @@ public class FilterDecorator extends SmartArrayDecorator {
 
     @Override
     public String operationDescription() {
-        return "Filter Decorator";
+        return "Used Filter Decorator";
     }
 }
